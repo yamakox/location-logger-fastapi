@@ -1,0 +1,14 @@
+#!/home/ユーザー名/保存先/location-logger-py/backend/.venv/bin/python
+
+# 本ファイルを元にindex.cgiを作成する。
+# 1行目は、backendをインストールした.venv配下のpythonのパス名に修正する
+
+from wsgiref.handlers import CGIHandler
+from location_logger import create_app
+from a2wsgi import ASGIMiddleware
+
+# .htaccessでパスを書き換えているため、FastAPIには`/index.cgi/パス`が渡される
+app = create_app(base_url='/index.cgi')
+app = ASGIMiddleware(app)
+
+CGIHandler().run(app)

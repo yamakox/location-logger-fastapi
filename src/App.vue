@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import MainComponent from './components/MainComponent.vue'
 </script>
 
 <template>
-  <HelloWorld />
+  <main-component />
 </template>
+
+<style scoped></style>

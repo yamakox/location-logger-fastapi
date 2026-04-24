@@ -1,0 +1,19 @@
+{
+  "name": "Location Logger with Python Backend",
+  "short_name": "Location Logger",
+  "display": "browser",
+  "background_color": "white",
+  "theme_color": "white",
+  "icons": [
+    {
+      "src": "favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
