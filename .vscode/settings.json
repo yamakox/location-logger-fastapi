@@ -1,4 +1,6 @@
 {
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
+
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "tsconfig.json": "tsconfig.*.json, env.d.ts",

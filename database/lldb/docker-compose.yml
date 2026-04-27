@@ -1,0 +1,26 @@
+services:
+  db:
+    image: mariadb:latest
+    restart: always
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-lldb}
+      MARIADB_USER: ${MARIADB_USER:-MariaDBUser}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-MariaDBPassword}
+      MARIADB_RANDOM_ROOT_PASSWORD: "1"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  php-my-admin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - ${PHPMYADMIN_PORT:-8080}:80
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
+
+volumes:
+  mariadb_data:

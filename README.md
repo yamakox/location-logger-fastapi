@@ -1,5 +1,171 @@
-# Vue 3 + TypeScript + Vite
+# location-logger-py
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Laravel+Vue3で作った位置情報を記録するSPAを、Pythonバックエンド(FastAPI+SQLModel)で作り直しました。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+本プロジェクトでは`node`及び`npm`が必要です。
+
+## フォルダ構成
+
+詳細は各フォルダのREADMEを参照してください。
+
+```text
+location-logger-py/   # Vueアプリ (Vite)
+├── backend/          # バックエンド (Python)
+└── database/         # データベース (MariaDBとphpMyAdminのコンテナを動かすDocker Compose)
+```
+
+## ローカル環境での使い方
+
+ローカル環境では、`database`を使ってローカル環境のサーバでデータベースのコンテナを動かして、`backend`からデータベースに接続します。
+
+```mermaid
+flowchart LR
+  ui[**Vueアプリ**
+     地図・地名表示、
+     現在位置の取得]
+  vite[**Vite**
+      Vueアプリ配信]
+  api[**backend**
+      REST API]
+  db[**MariaDBコンテナ**
+     位置情報の記録]
+  admin[**phpMyAdminコンテナ**
+     DB管理]
+
+  subgraph client [Webブラウザ]
+    direction TB
+    ui
+  end
+
+  subgraph server [サーバ]
+    direction TB
+    vite
+    api
+  end
+
+  subgraph database [database]
+    direction TB
+    db
+    admin
+  end
+
+  ui <--> vite
+  ui <--> api
+  api <--> db
+```
+
+### データベースとバックエンドの開始
+
+データベースの起動方法は、[./database/README.md](./database/README.md)をご覧ください。
+
+バックエンドの起動方法は、[./backend/README.md](./backend/README.md)をご覧ください。
+
+### Viteの開始
+
+Vueアプリに必要なパッケージをインストールします。
+
+```bash
+npm i
+```
+
+`.env.example`をコピーしてVite用の`.env`ファイルを作成して、バックエンドのエンドポイントURLを設定します。
+
+```ini:.env
+# バックエンドのエンドポイントURL
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+以下のコマンドでViteを起動してください。
+
+```bash
+npm run dev
+```
+
+## 共用レンタルサーバでの使い方
+
+バックエンドはDockerコンテナで動かすのが最善ですが、私の使っている共用レンタルサーバではDockerコンテナを動かすことはできませんので、共用レンタルサーバが用意しているApache経由で、バックエンドをCGIとして動かすようにします。
+
+```mermaid
+flowchart LR
+  ui[**Vueアプリ**
+     地図・地名表示、
+     現在位置の取得]
+  www[**public_html/\***
+      vite build成果物]
+  api[**public_html/index.cgi**
+      REST API]
+  db[**MySQL**
+     位置情報の記録]
+
+  subgraph client [Webブラウザ]
+    direction TB
+    ui
+  end
+
+  subgraph server [共用レンタルサーバ]
+    direction LR
+    www
+    api
+    db
+  end
+
+  ui <--> www
+  ui <--> api
+  api <---> db
+```
+
+### 事前準備
+
+データベースは、レンタルサーバの管理コンソールからデータベースを作成して、バックエンドの`.env`の設定値を控えておきます。
+
+```ini:.env
+DB_HOST=データベースのホスト名
+DB_PORT=データベースのポート番号
+DB_NAME=データベース名
+DB_USER=データベースの接続ユーザー名
+DB_PASSWORD=同パスワード
+```
+
+### バックエンドのセットアップ
+
+バックエンドは、私がレンタルしているサーバでは、SQLModelの依存関係(SQLAlchemy → greenlet)でコンパイルエラーが発生するため、`uv sync`でバックエンドをセットアップすることができません。そのため、`uv sync`の代わりに以下のコマンドを実行してバックエンドをセットアップします。
+
+以下のコマンドは`ssh`で共用レンタルサーバにログインして実行してください。
+
+```bash
+cd /home/<ユーザー名>/<保存先フォルダー>/
+git clone <GitHubのリポジトリURL>
+cd location-logger-py
+uv venv
+uv pip install SQLModel
+uv pip install .
+```
+
+インストール先のPythonのパス名を取得してください。`./public/index.cgi`の1行目に記述します。
+
+```bash
+uv python find
+```
+
+### Vueアプリのビルドと配置
+
+`./public/index.cgi.example`を参考に`./public/index.cgi`を作成して、1行目にレンタルサーバで取得したPythonのパス名を記述してください。
+
+私がレンタルしているサーバでは、`node`及び`npm`が動作しなかったため、ローカル環境でVueアプリをビルドしています。
+
+```bash
+npm i
+npm run build
+```
+
+`scp`などを使って、`./dist`配下のファイルを共用レンタルサーバの`public_html`などのフォルダーにコピーします。
+
+```bash
+scp -P <ポート番号> -r ./dist/* <レンタルサーバのユーザ名>@<レンタルサーバ名>:/home/<ユーザー名>/<public_htmlなどのフォルダー>
+```
+
+`ssh`で共用レンタルサーバにログインして、`index.cgi`に実行権を追加してください。
+
+```bash
+chmod +x index.cgi
+```

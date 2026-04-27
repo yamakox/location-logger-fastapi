@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "T001: backendのセットアップ",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "command": "uv sync"
+    },
+    {
+      "label": "T002: frontendのセットアップ",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "command": "npm i"
+    },
+    {
+      "label": "T011: DBの初期化",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "command": "uv run -m location_logger.db init"
+    },
+    {
+      "label": "T012: デバッグモードでbackend起動",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "command": "uv run -m debugpy --listen localhost:8001 -m uvicorn --host=localhost --port=8000 --factory location_logger:create_app --reload"
+    },
+    {
+      "label": "T013: frontend起動 (npm run dev)",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "command": "npm run dev"
+    }
+  ]
+}
