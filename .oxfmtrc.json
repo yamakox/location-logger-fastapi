@@ -6,6 +6,6 @@
   "trailingComma": "es5",
   "sortTailwindcss": {},
   "sortPackageJson": false,
-  "ignorePatterns": ["*.md"],
+  "ignorePatterns": ["*.md", "*.toml", ".env*"],
   "tabWidth": 2
 }

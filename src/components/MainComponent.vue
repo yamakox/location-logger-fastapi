@@ -95,7 +95,7 @@ import axios from 'axios'
 const debugClient = false
 
 // 開発時はローカルAPIを使用し、本番ビルド時は環境変数を使用する
-const serverUrl = import.meta.env.DEV ? 'http://localhost:8000' : import.meta.env.LL_API_BASE_URL
+const serverUrl = import.meta.env.VITE_API_BASE_URL || ''
 
 // DataTableの初期化
 DataTable.use(DataTablesCore)

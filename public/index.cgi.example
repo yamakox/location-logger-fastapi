@@ -1,7 +1,8 @@
-#!/home/ユーザー名/保存先/location-logger-py/backend/.venv/bin/python
+#!/home/<ユーザー名>/<保存先フォルダー>/location-logger-py/backend/.venv/bin/python
 
 # 本ファイルを元にindex.cgiを作成する。
-# 1行目は、backendをインストールした.venv配下のpythonのパス名に修正する
+# 1行目は、backendをインストールした.venv配下のpythonのパス名に修正する。
+# (`uv python find`コマンドで確認可能)
 
 from wsgiref.handlers import CGIHandler
 from location_logger import create_app
