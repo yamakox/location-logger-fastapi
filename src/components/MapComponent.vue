@@ -166,9 +166,7 @@ function onLocationFound(event) {
   event.distance = distance
   event.timestamp = currentTime // macOS Safariではtimestampの値が不正なので、上書きする
 
-  console.log(
-    `onLocationFound: ${event.latlng.lat}, ${event.latlng.lng} (distance= ${event.distance} m)`
-  )
+  console.log(`onLocationFound: ${event.latlng.lat}, ${event.latlng.lng} (distance= ${event.distance} m)`)
 
   // 緯度経度から都道府県・市区町村を検索 (経度・緯度で渡す必要がある)
   openReverseGeocoder([event.latlng.lng, event.latlng.lat])

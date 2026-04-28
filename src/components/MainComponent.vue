@@ -29,9 +29,7 @@
         </div>
         <div class="d-flex justify-content-end align-items-center flex-row">
           <div class="mx-3 my-0 p-0 text-nowrap">
-            <label class="hide-on-small-screen form-check-label text-nowrap" for="trackButton">
-              自動追跡
-            </label>
+            <label class="hide-on-small-screen form-check-label text-nowrap" for="trackButton"> 自動追跡 </label>
           </div>
           <div class="form-check form-switch">
             <input
@@ -48,13 +46,7 @@
     </div>
     <div class="log-panel">
       <div class="log-data">
-        <data-table
-          :data="logs"
-          :columns="columns"
-          :options="options"
-          @select="showLocation2"
-          class="display"
-        >
+        <data-table :data="logs" :columns="columns" :options="options" @select="showLocation2" class="display">
           <template #column-0="props">
             <div class="datetime-column">
               {{ getTimeString(props.rowData.timestamp) }}
@@ -69,8 +61,7 @@
       </div>
       <div class="footer-area d-flex flex-column justify-content-start align-items-center">
         <div class="mx-0 mb-2">
-          <a href="https://github.com/yamakox/location-logger-cf">本アプリ</a
-          >はデモ用として運用しています。<br />
+          <a href="https://github.com/yamakox/location-logger-cf">本アプリ</a>はデモ用として運用しています。<br />
           記録した位置情報は予告無く削除される場合があります。
         </div>
         <div class="m-0 p-0">CID: {{ cid }}</div>
@@ -187,13 +178,7 @@ function onLocationFound(event) {
 // 位置情報の履歴のイベントハンドラ
 function showLocation(record) {
   setLatLngs(record.timestamp)
-  map.value.showLocation(
-    record.latitude,
-    record.longitude,
-    record.timestamp,
-    record.address,
-    record.distance
-  )
+  map.value.showLocation(record.latitude, record.longitude, record.timestamp, record.address, record.distance)
 }
 
 function showLocation2(e, dt, type, index) {

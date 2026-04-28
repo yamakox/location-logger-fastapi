@@ -1,13 +1,12 @@
 from typing import Annotated
-from fastapi import (
-    APIRouter, HTTPException, Cookie, Header, Response
-)
+from fastapi import APIRouter, HTTPException, Cookie, Header, Response
 from sqlmodel import Session, select
 from ...common.client import setup_client
 from ...db.engine import engine
 from ...db.model import Client, Location
 
 maxLogCount = 300
+
 
 def create_router() -> APIRouter:
     # MARK: /api/v1/location
@@ -16,18 +15,15 @@ def create_router() -> APIRouter:
     # MARK: 位置情報の一覧を取得する
     @router.get('/')
     def index(
-        response: Response, 
-        cid: Annotated[str|None, Cookie()] = None, 
-        user_agent: Annotated[str|None, Header()] = None, 
+        response: Response,
+        cid: Annotated[str | None, Cookie()] = None,
+        user_agent: Annotated[str | None, Header()] = None,
     ):
         """位置情報の一覧を取得する。"""
         try:
             with Session(engine) as session:
                 client = setup_client(session, response, cid, user_agent)
-                statement = (
-                    select(Client)
-                    .where(Client.cid == client.cid)
-                )
+                statement = select(Client).where(Client.cid == client.cid)
                 client = session.exec(statement).first()
                 if not client:
                     return []
@@ -45,10 +41,10 @@ def create_router() -> APIRouter:
     # MARK: 位置情報を追加する
     @router.post('/')
     def store(
-        location: Location, 
-        response: Response, 
-        cid: Annotated[str|None, Cookie()] = None, 
-        user_agent: Annotated[str|None, Header()] = None, 
+        location: Location,
+        response: Response,
+        cid: Annotated[str | None, Cookie()] = None,
+        user_agent: Annotated[str | None, Header()] = None,
     ):
         try:
             with Session(engine) as session:

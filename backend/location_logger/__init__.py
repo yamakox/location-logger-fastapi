@@ -4,17 +4,19 @@ from contextlib import asynccontextmanager
 from . import api
 from .common import env
 
+
 # MARK: lifespan
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # app開始時の初期化処理
-    #database.init()
+    # database.init()
 
     # app実行中
     yield
 
     # app終了時の終了処理
-    #database.exit()
+    # database.exit()
+
 
 # MARK: create an app
 def create_app(base_url: str = '') -> FastAPI:
@@ -24,11 +26,11 @@ def create_app(base_url: str = '') -> FastAPI:
     # CORS対策
     if env.FRONTEND_ORIGIN:
         app.add_middleware(
-            CORSMiddleware, 
-            allow_origins=[env.FRONTEND_ORIGIN], 
-            allow_credentials=True, 
-            allow_methods=['*'], 
-            allow_headers=['*'], 
+            CORSMiddleware,
+            allow_origins=[env.FRONTEND_ORIGIN],
+            allow_credentials=True,
+            allow_methods=['*'],
+            allow_headers=['*'],
         )
 
     # Initialize application instance

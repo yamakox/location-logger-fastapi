@@ -2,9 +2,11 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import SQLModel
 from importlib.metadata import version
 
+
 # MARK: VersionResponse
 class VersionResponse(SQLModel, table=False):
     version: str
+
 
 def create_router() -> APIRouter:
     # MARK: /api/v1/misc
