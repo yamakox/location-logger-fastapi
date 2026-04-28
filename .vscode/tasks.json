@@ -40,6 +40,22 @@
         "cwd": "${workspaceFolder}"
       },
       "command": "npm run dev"
+    },
+    {
+      "label": "T021: ソースコードのチェック",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "command": "echo '***** Frontend check *****' && npx oxlint && cd backend && echo '***** Backend check *****' && uv run ruff check"
+    },
+    {
+      "label": "T022: ソースコードの書式整形",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "command": "npm run format && cd backend && uv run ruff format"
     }
   ]
 }
