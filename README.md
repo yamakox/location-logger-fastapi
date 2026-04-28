@@ -20,17 +20,17 @@ location-logger-fastapi/   # Vueアプリ (Vite)
 
 ```mermaid
 flowchart LR
-  ui[**Vueアプリ**
+  ui["`**Vueアプリ**
      地図・地名表示、
-     現在位置の取得]
-  vite[**Vite**
-      Vueアプリ配信]
-  api[**backend**
-      REST API]
-  db[**MariaDBコンテナ**
-     位置情報の記録]
-  admin[**phpMyAdminコンテナ**
-     DB管理]
+     現在位置の取得`"]
+  vite["`**Vite**
+      Vueアプリ配信`"]
+  api["`**backend**
+      REST API`"]
+  db["`**MariaDBコンテナ**
+     位置情報の記録`"]
+  admin["`**phpMyAdminコンテナ**
+     DB管理`"]
 
   subgraph client [Webブラウザ]
     direction TB
@@ -87,15 +87,15 @@ npm run dev
 
 ```mermaid
 flowchart LR
-  ui[**Vueアプリ**
+  ui["**Vueアプリ**
      地図・地名表示、
-     現在位置の取得]
-  www[**public_html/\***
-      vite build成果物]
-  api[**public_html/index.cgi**
-      REST API]
-  db[**MySQL**
-     位置情報の記録]
+     現在位置の取得"]
+  www["`**public_html/\***
+      vite build成果物`"]
+  api["`**public_html/index.cgi**
+      REST API`"]
+  db["`**MySQL**
+     位置情報の記録`"]
 
   subgraph client [Webブラウザ]
     direction TB
