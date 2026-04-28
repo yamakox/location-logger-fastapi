@@ -81,6 +81,8 @@ VITE_API_BASE_URL=http://localhost:8000
 npm run dev
 ```
 
+Webブラウザで`http://localhost:5173/`を開きます。
+
 ## 共用レンタルサーバでの使い方
 
 バックエンドはDockerコンテナで動かすのが最善ですが、私の使っている共用レンタルサーバではDockerコンテナを動かすことはできませんので、共用レンタルサーバが用意しているApache経由で、バックエンドをCGIとして動かすようにします。
@@ -149,11 +151,11 @@ uv pip install .
 uv python find
 ```
 
-### Vueアプリのビルドと配置
+### Vueアプリのビルドと配置 (ローカル環境での操作)
 
 `./public/index.cgi.example`を参考に`./public/index.cgi`を作成して、1行目にレンタルサーバで取得したPythonのパス名を記述してください。
 
-`.env.production`を作成して、バックエンドのエンドポイントURLとして`/incex.cgi`を設定します。
+`./.env.production`を作成して、バックエンドのエンドポイントURLとして`/incex.cgi`を設定します。
 
 ```ini:.env.production
 VITE_API_BASE_URL=/index.cgi
@@ -197,6 +199,27 @@ chmod +x index.cgi
 
 ```bash
 # .envのあるフォルダーで操作を行う
-cd <public_htmlなどのフォルダー>
+# cd <public_htmlなどのフォルダー>
 python3 -m location_logger.db init
 ```
+
+データベースにテーブルができていることを確認します。
+
+```bash
+# .envのあるフォルダーで操作を行う
+# cd <public_htmlなどのフォルダー>
+source .env
+mysql -h${DB_HOST} -P${DB_PORT} -u${DB_USER} -p${DB_PASSWORD} ${DB_NAME}
+```
+
+```mysql
+SHOW TABLES;
+```
+
+また、ローカル環境からREST APIにアクセスできることを確認します。
+
+```bash
+curl https://<ホスト名>/index.cgi/api/v1/misc/version
+```
+
+Webブラウザで共用レンタルサーバ(`https://<ホスト名>/`)にアクセスして、Vueアプリが表示されることを確認します。

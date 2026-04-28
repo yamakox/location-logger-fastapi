@@ -56,6 +56,14 @@
         "cwd": "${workspaceFolder}"
       },
       "command": "npm run format && cd backend && uv run ruff format"
+    },
+    {
+      "label": "T023: Vueアプリのビルド",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "command": "npm run build"
     }
   ]
 }
