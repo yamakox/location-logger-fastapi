@@ -1,5 +1,5 @@
 {
-  "name": "location-logger-py",
+  "name": "location-logger-fastapi",
   "private": true,
   "version": "0.0.0",
   "type": "module",

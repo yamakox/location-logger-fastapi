@@ -61,7 +61,7 @@
       </div>
       <div class="footer-area d-flex flex-column justify-content-start align-items-center">
         <div class="mx-0 mb-2">
-          <a href="https://github.com/yamakox/location-logger-cf">本アプリ</a>はデモ用として運用しています。<br />
+          <a href="https://github.com/yamakox/location-logger-fastapi">本アプリ</a>はデモ用として運用しています。<br />
           記録した位置情報は予告無く削除される場合があります。
         </div>
         <div class="m-0 p-0">CID: {{ cid }}</div>
