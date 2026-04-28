@@ -224,7 +224,10 @@ async function postLocation() {
 
   // `withCredentials: true`を指定すると、Cookieのcidの値を取得できる
   try {
-    await axios.post(`${serverUrl}/api/v1/location`, record, { withCredentials: true })
+    // https://zenn.dev/motoishimotoi/articles/925d04192e66f9
+    // API Router側では'/location`の下に`/`を付けているため、
+    // 呼び出し側も`/`を付けないと、307 Temporary Redirectが発生する。
+    await axios.post(`${serverUrl}/api/v1/location/`, record, { withCredentials: true })
     if (logs.value.length >= maxLogCount) {
       logs.value.length = maxLogCount - 1
     }
@@ -245,7 +248,8 @@ onMounted(async () => {
     const promiseVersion = axios.get(`${serverUrl}/api/v1/misc/version`, {
       withCredentials: true,
     })
-    const promiseClient = axios.get(`${serverUrl}/api/v1/client`, {
+    // 307 Temporary Redirectが発生するため、`/`を付ける
+    const promiseClient = axios.get(`${serverUrl}/api/v1/client/`, {
       withCredentials: true,
     })
     const [resVersion, resClient] = await Promise.all([promiseVersion, promiseClient])
@@ -254,7 +258,8 @@ onMounted(async () => {
 
     // 位置情報の一覧の取得
     if (!debugClient) {
-      const resLocation = await axios.get(`${serverUrl}/api/v1/location`, {
+      // 307 Temporary Redirectが発生するため、`/`を付ける
+      const resLocation = await axios.get(`${serverUrl}/api/v1/location/`, {
         withCredentials: true,
       })
       logs.value = resLocation.data

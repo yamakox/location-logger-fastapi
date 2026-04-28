@@ -2,6 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, HTTPException, Cookie, Header, Response
 from sqlmodel import Session, SQLModel
 from ...common.client import setup_client
+from ...common.common import set_common_response_header
 from ...db.engine import engine
 
 
@@ -24,6 +25,7 @@ def create_router() -> APIRouter:
         """位置情報のクライアントを識別するCIDを取得する。"""
         try:
             with Session(engine) as session:
+                set_common_response_header(response)
                 client = setup_client(session, response, cid, user_agent)
                 return ClientResponse(cid=client.cid)
         except Exception as e:

@@ -1,3 +1,6 @@
+# custom index.cgi
+public/index.cgi
+
 # Logs
 logs
 *.log

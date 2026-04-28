@@ -116,17 +116,19 @@ flowchart LR
 
 ### 事前準備
 
-データベースは、レンタルサーバの管理コンソールからデータベースを作成して、バックエンドの`.env`の設定値を控えておきます。
+データベースは、レンタルサーバの管理コンソールからデータベースを作成して、`./public/.env.example`を参考に`./public/.env`を作成してください。
 
-```ini:.env
-DB_HOST=データベースのホスト名
-DB_PORT=データベースのポート番号
-DB_NAME=データベース名
-DB_USER=データベースの接続ユーザー名
-DB_PASSWORD=同パスワード
+```ini:./public/.env
+DB_HOST=<データベースのホスト名>
+DB_PORT=<データベースのポート番号>
+DB_NAME=<データベース名>
+DB_USER=<データベースの接続ユーザー名>
+DB_PASSWORD=<同パスワード>
+ENGINE_ECHO=False
+FRONTEND_ORIGIN=
 ```
 
-### バックエンドのセットアップ
+### バックエンドのインストール (レンタルサーバ上での操作)
 
 バックエンドは、私がレンタルしているサーバでは、SQLModelの依存関係(SQLAlchemy → greenlet)でコンパイルエラーが発生するため、`uv sync`でバックエンドをセットアップすることができません。そのため、`uv sync`の代わりに以下のコマンドを実行してバックエンドをセットアップします。
 
@@ -135,9 +137,9 @@ DB_PASSWORD=同パスワード
 ```bash
 cd /home/<ユーザー名>/<保存先フォルダー>/
 git clone <GitHubのリポジトリURL>
-cd location-logger-fastapi
+cd location-logger-fastapi/backend
 uv venv
-uv pip install SQLModel
+uv pip install --no-build SQLModel
 uv pip install .
 ```
 
@@ -151,6 +153,16 @@ uv python find
 
 `./public/index.cgi.example`を参考に`./public/index.cgi`を作成して、1行目にレンタルサーバで取得したPythonのパス名を記述してください。
 
+`.env.production`を作成して、バックエンドのエンドポイントURLとして`/incex.cgi`を設定します。
+
+```ini:.env.production
+VITE_API_BASE_URL=/index.cgi
+```
+
+補足: `.htaccess`で`/api/*`を`/index.cgi/api/*`に変更する`RewriteRule`を作った場合、
+`/api/*`へリクエストを送るたびにリダイレクト(301)が発生して効率が悪かったため、
+Vueアプリをビルドする際に`/index.cgi`を`/api/*`の前に付けるようにしました。
+
 私がレンタルしているサーバでは、`node`及び`npm`が動作しなかったため、ローカル環境でVueアプリをビルドしています。
 
 ```bash
@@ -161,11 +173,30 @@ npm run build
 `scp`などを使って、`./dist`配下のファイルを共用レンタルサーバの`public_html`などのフォルダーにコピーします。
 
 ```bash
-scp -P <ポート番号> -r ./dist/* <レンタルサーバのユーザ名>@<レンタルサーバ名>:/home/<ユーザー名>/<public_htmlなどのフォルダー>
+# dist配下のファイル(.envも含む)をコピーする
+scp -P <ポート番号> -r ./dist/* ./dist/.[!.]* <レンタルサーバのユーザ名>@<レンタルサーバ名>:/home/<ユーザー名>/<public_htmlなどのフォルダー>
 ```
 
-`ssh`で共用レンタルサーバにログインして、`index.cgi`に実行権を追加してください。
+### レンタルサーバ上でのセットアップ
+
+`ssh`で共用レンタルサーバにログインして、`.venv`をactivateします。
 
 ```bash
+cd /home/<ユーザー名>/<保存先フォルダー>/location-logger-fastapi/backend
+. .venv/bin/activate
+```
+
+`index.cgi`に実行権を追加してください。
+
+```bash
+cd <public_htmlなどのフォルダー>
 chmod +x index.cgi
+```
+
+データベースを初期化してください。
+
+```bash
+# .envのあるフォルダーで操作を行う
+cd <public_htmlなどのフォルダー>
+python3 -m location_logger.db init
 ```

@@ -2,6 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, HTTPException, Cookie, Header, Response
 from sqlmodel import Session, select
 from ...common.client import setup_client
+from ...common.common import set_common_response_header
 from ...db.engine import engine
 from ...db.model import Client, Location
 
@@ -22,6 +23,7 @@ def create_router() -> APIRouter:
         """位置情報の一覧を取得する。"""
         try:
             with Session(engine) as session:
+                set_common_response_header(response)
                 client = setup_client(session, response, cid, user_agent)
                 statement = select(Client).where(Client.cid == client.cid)
                 client = session.exec(statement).first()
@@ -48,6 +50,7 @@ def create_router() -> APIRouter:
     ):
         try:
             with Session(engine) as session:
+                set_common_response_header(response)
                 client = setup_client(session, response, cid, user_agent)
                 location.client_id = client.id
                 session.add(location)
