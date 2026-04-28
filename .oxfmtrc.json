@@ -6,7 +6,7 @@
   "trailingComma": "es5",
   "sortTailwindcss": {},
   "sortPackageJson": false,
-  "ignorePatterns": ["*.md", "*.toml", "*.json", "*.yml", "*.yaml", ".env*"],
+  "ignorePatterns": ["*.md", "*.toml", "*.json", "*.yml", "*.yaml", ".env*", "worker-configuration.d.ts"],
   "tabWidth": 2,
   "printWidth": 120
 }
