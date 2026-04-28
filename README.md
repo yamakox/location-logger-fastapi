@@ -87,9 +87,9 @@ npm run dev
 
 ```mermaid
 flowchart LR
-  ui["**Vueアプリ**
+  ui["`**Vueアプリ**
      地図・地名表示、
-     現在位置の取得"]
+     現在位置の取得`"]
   www["`**public_html/\***
       vite build成果物`"]
   api["`**public_html/index.cgi**
