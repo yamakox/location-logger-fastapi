@@ -2,7 +2,7 @@
 
 Laravel+Vue3で作った位置情報を記録するSPAを、Pythonバックエンド(FastAPI+SQLModel)で作り直しました。
 
-本プロジェクトでは`node`及び`npm`が必要です。
+本プロジェクトではフロントエンド用に`node`・`npm`、バックエンド用に`uv`が必要です。
 
 ## フォルダ構成
 
@@ -85,7 +85,7 @@ Webブラウザで`http://localhost:5173/`を開きます。
 
 ## 共用レンタルサーバでの使い方
 
-バックエンドはDockerコンテナで動かすのが最善ですが、私の使っている共用レンタルサーバではDockerコンテナを動かすことはできませんので、共用レンタルサーバが用意しているApache経由で、バックエンドをCGIとして動かすようにします。
+本番環境では、バックエンドをDockerコンテナで動かせれば最善ですが、私の使っている共用レンタルサーバではDockerコンテナを動かすことはできませんので、共用レンタルサーバが用意しているApache経由で、バックエンドをCGIとして動かすようにします。
 
 ```mermaid
 flowchart LR
@@ -140,15 +140,24 @@ FRONTEND_ORIGIN=
 cd /home/<ユーザー名>/<保存先フォルダー>/
 git clone <GitHubのリポジトリURL>
 cd location-logger-fastapi/backend
-uv venv
-uv pip install --no-build SQLModel
-uv pip install .
+
+# 共用レンタルサーバが提供しているPython3.11を使用
+/path/to/python3.11 -m venv .venv
+source .venv/bin/activate
+pip install --no-build greenlet  # 途中でエラーが発生しても、最後に`Successfully installed greenlet-3.2.5`のように表示されればOK
+pip install .
+
+# もし共用レンタルサーバでuvが使えるのであれば、以下のコマンドでも可
+#uv venv
+#uv pip install --no-build greenlet
+#uv pip install .
 ```
 
 インストール先のPythonのパス名を取得してください。`./public/index.cgi`の1行目に記述します。
 
 ```bash
-uv python find
+source .venv/bin/activate
+which python
 ```
 
 ### Vueアプリのビルドと配置 (ローカル環境での操作)
