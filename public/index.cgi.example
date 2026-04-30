@@ -2,7 +2,6 @@
 
 # 本ファイルを元にindex.cgiを作成する。
 # 1行目は、backendをインストールした.venv配下のpythonのパス名に修正する。
-# (`uv python find`コマンドで確認可能)
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -14,7 +13,8 @@ load_dotenv(str(env_path))
 from wsgiref.handlers import CGIHandler
 from location_logger import create_app
 from a2wsgi import ASGIMiddleware
-# .htaccessでパスを書き換えているため、FastAPIには`/index.cgi/パス`が渡される
+
+# FastAPIには`/index.cgi/パス`が渡される
 app = create_app(base_url='/index.cgi')
 app = ASGIMiddleware(app)
 
